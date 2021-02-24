@@ -1,70 +1,56 @@
 <style>
-hr.rounded {
-  border-top: 3px solid #000;
-}
+	hr.rounded {
+	border-top: 3px solid #000;
+	}
 </style>
-
 <html>
-<body>
-	<title>Chemistry</title>
-	
-	<section>
-		<h2>Tempurature Conversions</h2>
-		<p id="tempForm">C = K + 273</p>
-		<input id="input" autocomplete="off" placeholder="Value to Convert" onkeydown="convert()" onkeyup="convert()"/>
-
-		<select onchange="convert()" id="mode">
-		  <option value="ck">C to K</option>
-		  <option value="kc">K to C</option>
-		</select>
-		<p id="output"></p>
-		<hr class="rounded">
-	</section>
-
-
-
-
-	<section>
-		<h2>Energy Changes</h2>
-		<p>Q = MCΔT</p>
-		<input id="joules" autocomplete="off" placeholder="Q" disabled/>
-		<input id="mass" autocomplete="off" placeholder="M" />
-
-		<select id="subs">
-			<optgroup label="Substance">
-				<option value="wl">Water (l) 4.18</option>
-				<option value="ws">Water (s) 2.03</option>
-				<option value="wg">Water (g) 2.0</option>
-				<option value="al">Aluminum (s) 0.89</option>
-				<option value="fe">Iron (s) 0.45</option>
-				<option value="hg">Mercury (l) 0.14</option>
-				<option value="c">Carbon (s) 0.71</option>
-				<option value="ag">Silver (s) 0.24</option>
-				<option value="au">Gold (s) 0.13</option>
-
-				
-			</optgroup>
-		</select>
-
-		<input id="temp" autocomplete="off" placeholder="ΔT" />
-
-		<select onchange="check()" id="energyForm">
-			<optgroup label="Solving for">
-				<option value="j">Joules (Q)</option>
-				<option value="m">Mass (M)</option>
-				<option value="t">Change in Tempurature (ΔT)</option>
-			</optgroup>
-		</select>
-		<button onclick="joules()">Solve</button>
-		<p id="energyOut"></p>
-		<hr class="rounded">
-	</section>
-
-
-
-</body>
+	<body>
+		<title>Chemistry</title>
+		<section>
+			<h2>Tempurature Conversions</h2>
+			<p id="tempForm">C = K + 273</p>
+			<input id="input" autocomplete="off" placeholder="Value to Convert" onkeydown="convert()" onkeyup="convert()"/>
+			<select onchange="convert()" id="mode">
+				<option value="ck">C to K</option>
+				<option value="kc">K to C</option>
+			</select>
+			<p id="output"></p>
+			<hr class="rounded">
+		</section>
+		<section>
+			<h2>Energy Changes</h2>
+			<p>Q = MCΔT</p>
+			<input id="joules" autocomplete="off" placeholder="Q" disabled/>
+			<input id="mass" autocomplete="off" placeholder="M" />
+			<select id="subs">
+				<optgroup label="Substance">
+					<option value="wl">Water (l) 4.18</option>
+					<option value="ws">Water (s) 2.03</option>
+					<option value="wg">Water (g) 2.0</option>
+					<option value="al">Aluminum (s) 0.89</option>
+					<option value="fe">Iron (s) 0.45</option>
+					<option value="hg">Mercury (l) 0.14</option>
+					<option value="c">Carbon (s) 0.71</option>
+					<option value="ag">Silver (s) 0.24</option>
+					<option value="au">Gold (s) 0.13</option>
+				</optgroup>
+			</select>
+			<input id="temp" autocomplete="off" placeholder="ΔT" />
+			<select onchange="check()" id="energyForm">
+				<optgroup label="Solving for">
+					<option value="j">Joules (Q)</option>
+					<option value="m">Mass (M)</option>
+					<option value="c">Specific Heat (C)</option>
+					<option value="t">Change in Tempurature (ΔT)</option>
+				</optgroup>
+			</select>
+			<button onclick="joules()">Solve</button>
+			<p id="energyOut"></p>
+			<hr class="rounded">
+		</section>
+		<script type='text/javascript'></script>
+	</body>
 </html>
-
 <script>
 	function convert() {
 		var mode = document.getElementById('mode').value;
@@ -72,13 +58,13 @@ hr.rounded {
 		var output = document.getElementById('output').innerHTML;
 		if(mode == "ck") {
 			document.getElementById('tempForm').innerHTML = "C = K + 273"
-			if (inp != "") {document.getElementById('output').innerHTML = parseInt(inp) + 273 + " °K";}
+			if (inp != "") {document.getElementById('output').innerHTML = numberWithCommas(parseInt(inp) + 273) + " °K";}
 		} else if(mode == "kc") {
 			document.getElementById('tempForm').innerHTML = "K = C - 273"
 			if (inp != "") {document.getElementById('output').innerHTML = parseInt(inp) - 273 + " °C";}
 		}
 	}
-
+	
 	function check() {
 		document.getElementById('joules').value = "";
 		document.getElementById('mass').value = "";
@@ -86,33 +72,51 @@ hr.rounded {
 		var energyForm = document.getElementById('energyForm').value;
 		if(energyForm == "j") {
 			document.getElementById('joules').disabled = true;
-			document.getElementById('mass').disabled = false;
+	     document.getElementById('mass').disabled = false;
+	     document.getElementById('subs').disabled = false;
 			document.getElementById('temp').disabled = false;
 		} else if (energyForm == "m") {
 			document.getElementById('joules').disabled = false;
 			document.getElementById('mass').disabled = true;
+	     document.getElementById('subs').disabled = false;
 			document.getElementById('temp').disabled = false;
 		} else if (energyForm == "t") {
 			document.getElementById('joules').disabled = false;
 			document.getElementById('mass').disabled = false;
+	     document.getElementById('subs').disabled = false;
 			document.getElementById('temp').disabled = true;
-		}
+		} else if (energyForm == "c") {
+	     document.getElementById('subs').disabled = true;
+	     document.getElementById('joules').disabled = false;
+			document.getElementById('mass').disabled = false;
+			document.getElementById('temp').disabled = false;
+	   }
 	}
-
-
+	
+	 const roundToHundredth = (value) => {
+	   return Number(value.toFixed(2));
+	 };
+	
+	 function numberWithCommas(x) {
+	   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	 }
+	
+	
 	function joules() {
 		var joules = document.getElementById('joules').value;
 		var mass = document.getElementById('mass').value;
 		var temp = document.getElementById('temp').value;
 		var constant = parseFloat(document.getElementById('subs').selectedOptions[0].text.slice(-4));
-		console.log(constant);
 		var energyForm = document.getElementById('energyForm').value;
+	
 		if(energyForm == "j") {
-			document.getElementById('energyOut').innerHTML = parseFloat(mass) * parseFloat(constant) * parseFloat(temp) + " Joules";
+			document.getElementById('energyOut').innerHTML = numberWithCommas(roundToHundredth(parseFloat(mass) * parseFloat(constant) * parseFloat(temp))) + " Joules";
 		} else if (energyForm == "t") {
-			document.getElementById('energyOut').innerHTML = (parseFloat(joules)/parseFloat(constant)) / parseFloat(mass) + " ΔT";
+			document.getElementById('energyOut').innerHTML = numberWithCommas(roundToHundredth(parseFloat(joules)/parseFloat(constant)) / parseFloat(mass)) + " ΔT";
 		} else if (energyForm == "m") {
-			document.getElementById('energyOut').innerHTML = (parseFloat(joules) / parseFloat(constant)) / parseFloat(temp) + " g";
-		}
+			document.getElementById('energyOut').innerHTML = numberWithCommas(roundToHundredth(parseFloat(joules) / parseFloat(constant)) / parseFloat(temp)) + " g";
+		} else if (energyForm == "c") {
+	     document.getElementById('energyOut').innerHTML = numberWithCommas(roundToHundredth(parseFloat(joules) / parseFloat(mass)) / parseFloat(temp)) + " J/g °C"
+	   }
 	}
 </script>
