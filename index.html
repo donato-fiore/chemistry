@@ -46,9 +46,35 @@
 			</select>
 			<button onclick="joules()">Solve</button>
 			<p id="energyOut"></p>
+			<hr style="border-top: solid #ababab" class="rounded">
+		</section>
+
+		<section>
+			<!--<h2>Energy Changes Continued...</h2>-->
+			<p>Q = mH<sub>v or f</sub></p>
+			<input id="het" placeholder="q" autocomplete="off" disabled>
+			<input id="massm" placeholder="m" autocomplete="off">
+
+			<select id="heatof">
+				<option value="il">Ice to Liquid (334)</option>
+				<option value="li">Liquid to Ice (334)</option>
+				<option value="lg">Liquid to Gas (2260)</option>
+				<option value="gl">Gas to Liquid (2260)</option>
+			</select>
+
+
+			<select id="choice" onchange="contcheck()">
+				<optgroup label="Solving for">
+					<option value="jo">Joules (Q)</option>
+					<option value="ma">Mass (M)</option>
+				</optgroup>
+			</select>
+
+
+			<button onclick="continued()">Solve</button>
+			<p id="contOut"></p>
 			<hr class="rounded">
 		</section>
-		<script type='text/javascript'></script>
 	</body>
 </html>
 <script>
@@ -92,6 +118,10 @@
 			document.getElementById('temp').disabled = false;
 	   }
 	}
+
+	function removeChar(x) {
+		return x.toString().replace(/[^0-9]/g, "")
+	}
 	
 	 const roundToHundredth = (value) => {
 	   return Number(value.toFixed(2));
@@ -118,5 +148,35 @@
 		} else if (energyForm == "c") {
 	     document.getElementById('energyOut').innerHTML = numberWithCommas(roundToHundredth(parseFloat(joules) / parseFloat(mass)) / parseFloat(temp)) + " J/g °C"
 	   }
+	}
+
+
+	function contcheck() {
+		document.getElementById('het').value = "";
+		document.getElementById('massm').value = "";
+		var choice = document.getElementById('choice').value;
+		if(choice == "jo") {
+			document.getElementById('het').disabled = true;
+	     	document.getElementById('massm').disabled = false;
+		} else if (choice == "ma") {
+			document.getElementById('het').disabled = false;
+			document.getElementById('massm').disabled = true;
+		}
+	}
+
+	function continued() {
+		var het = document.getElementById('het').value;
+		var mess = document.getElementById('massm').value;
+		var choice = document.getElementById('choice').value;
+		var constant = parseInt(removeChar(document.getElementById('heatof').selectedOptions[0].text).slice(-5));
+		//console.log(constant)
+		document.getElementById('contOut').innerHTML = constant;
+
+		if(choice == "jo")
+		{
+			document.getElementById('contOut').innerHTML = numberWithCommas(roundToHundredth(parseFloat(parseFloat(mess * constant)))) + " Joules";
+		} else if(choice == "ma") {
+			document.getElementById('contOut').innerHTML = numberWithCommas(roundToHundredth(parseFloat(parseFloat(het / constant)))) + " Grams";
+		}
 	}
 </script>
